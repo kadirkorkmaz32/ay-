@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minik Bir Sürpriz 💗</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #ffe0ec, #fff0f5, #ffd6e7);
+    font-family: 'Comic Sans MS', cursive;
+    text-align: center;
+    color: #d63384;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+h1 {
+    font-size: 27px;
+}
+
+p {
+    font-size: 19px;
+}
+
+button {
+    background: #ff70a6;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    color: white;
+    font-size: 19px;
+    cursor: pointer;
+    margin: 10px;
+    box-shadow: 0 5px 15px #ff9fbd;
+    transition: .2s;
+}
+
+button:hover {
+    transform: scale(1.08);
+}
+
+.hidden {
+    display: none;
+}
+
+#answers {
+    margin-top: 20px;
+}
+
+#result {
+    font-size: 25px;
+    margin-top: 25px;
+    animation: pop .6s;
+}
+
+@keyframes pop {
+    from {transform: scale(0);}
+    to {transform: scale(1);}
+}
+
+.falling {
+    position: fixed;
+    top: -50px;
+    pointer-events: none;
+    z-index: 999;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+#final {
+    padding: 30px;
+}
+
+#secret {
+    position: fixed;
+    bottom: 12px;
+    left: 10px;
+    font-size: 10px;
+    color: #ff8ab5;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+#secretMessage {
+    position: fixed;
+    bottom: 50px;
+    left: 10px;
+    background: white;
+    padding: 12px;
+    border-radius: 15px;
+    display: none;
+    box-shadow: 0 0 15px pink;
+    z-index: 1002;
+}
+
+#arrow {
+    position: fixed;
+    bottom: 27px;
+    left: 75px;
+    font-size: 20px;
+    transform: rotate(20deg);
+    animation: point 1s infinite alternate;
+}
+
+@keyframes point {
+    to {transform: translateX(-8px) rotate(20deg);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="main">
+
+    <h1>💗 Sana minicik bir sorum var... 💗</h1>
+
+    <button onclick="start()">Bana tıkla 🧸</button>
+
+    <div id="question" class="hidden">
+        <h1>Birisi bana kızgın mı acaba? 🥺</h1>
+
+        <div id="answers">
+            <button onclick="yes()">Evet 🥺</button>
+            <button onclick="no()">Hayır 💗</button>
+        </div>
+    </div>
+
+    <div id="result"></div>
+
+    <div id="final" class="hidden">
+        <h1>Bir şey daha söyleyeceğim... 🌹</h1>
+        <p>
+        Çok güzelsin. Böyle şeyler söylüyorum diye
+        rahatsız oluyorsun... 🥹
+        </p>
+
+        <p>
+        Gün içerisinde biraz azaltacağım. 🙃
+        </p>
+
+        <h1>🌹💗🧸💗🌹</h1>
+        <p>Bu arada... miyav! 🐱</p>
+    </div>
+
+</div>
+
+<div id="arrow">↖</div>
+
+<div id="secret" onclick="secretClick()">
+    çok aşırı gizli kısım
+</div>
+
+<div id="secretMessage">
+    SENİ SEVİYORUM ❤️
+</div>
+
+<audio id="meow">
+    <source src="https://www.myinstants.com/media/sounds/cat-meow.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+function start() {
+    document.querySelector("button").style.display = "none";
+    document.getElementById("question").classList.remove("hidden");
+}
+
+function yes() {
+    document.getElementById("result").innerHTML =
+    "Özür dilerim... 🥺❤️";
+    
+    shower(["💗","💕","❤️","🌹"]);
+    setTimeout(showFinal, 2500);
+}
+
+function no() {
+    document.getElementById("result").innerHTML =
+    "Tamaaaam 🙈💗";
+
+    shower(["💗","💕","❤️","🧸","🌸"]);
+    setTimeout(showFinal, 2500);
+}
+
+function showFinal() {
+    document.getElementById("final").classList.remove("hidden");
+
+    const audio = document.getElementById("meow");
+    audio.volume = 0.5;
+    audio.play().catch(() => {});
+
+    shower(["🌹","💗","❤️","🌷","💕","🧸"]);
+}
+
+// Ekrana tıklanınca sürprizler
+
+document.addEventListener("click", function(e) {
+
+    if (
+        e.target.tagName === "BUTTON" ||
+        e.target.id === "secret" ||
+        e.target.id === "secretMessage"
+    ) return;
+
+    shower(["❤️","💗","🐝","🐻","🧸","🐞","🌸","💕"]);
+});
+
+function shower(items) {
+    for(let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            const el = document.createElement("div");
+            el.className = "falling";
+            el.innerHTML = items[Math.floor(Math.random() * items.length)];
+
+            el.style.left = Math.random() * 100 + "vw";
+            el.style.fontSize = (20 + Math.random() * 25) + "px";
+            el.style.animationDuration = (3 + Math.random() * 3) + "s";
+
+            document.body.appendChild(el);
+
+            setTimeout(() => el.remove(), 6500);
+        }, i * 100);
+    }
+}
+
+// Gizli bölüm
+
+function secretClick() {
+    const msg = document.getElementById("secretMessage");
+
+    msg.style.display =
+    msg.style.display === "block" ? "none" : "block";
+
+    if(msg.style.display === "block") {
+        shower(["❤️","💕","💗","🌹"]);
+    }
+}
+
+// Sayfa açılınca da minik kalpler
+
+setInterval(() => {
+    if(Math.random() > 0.5) {
+        shower(["💗","💕","🌸"]);
+    }
+}, 7000);
+
+</script>
+
+</body>
+</html>
